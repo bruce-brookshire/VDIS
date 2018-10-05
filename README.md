@@ -2,6 +2,13 @@
 
 # Vanderbilt Dining Info Service (VDIS)
 
+Vanderbilt dining is both a blessing and a curse. While Vandy Dining offers a wide variety of selections of food, they often are not able to handle the high demand of students during lunch hours.
+
+Vanderbilt dining has begun to adopt many resources lately that communicate with students what they are serving, and when they are open. However, these resources are not convenient for students.
+
+This texting application attempts to close this gap by providing valuable information to students (like menus and wait times) in a convenient, accessible manner. Students, Professors, and VUMC employees should have a convenient way to access information about their meal times, as meal times are integral to the human livelihood.
+
+
 # Questions:
 
 1. What are your concerns about Vanderbilt Dining?
@@ -14,7 +21,6 @@
 8. Why do you decide to choose one dining location over another?
 9. Do you care about the food selection offered at campus dining locations?
 10. Does campus dining menu selection for the day impact where you go for meals?
-
 
 # Answers:
 
