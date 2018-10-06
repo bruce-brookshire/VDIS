@@ -78,3 +78,7 @@ The structure of a user must include:
 It could also be useful to store a users past interactions with the service to potentially add machine learning solutions to readily identified functional dependencies within the available usage data.
 
 While this is a user facing application, the systems must be built from inward (internal api and state tracking) to out (user interactive texting services). This helps identify the necessary core functionality that the interface must accommodate.
+
+During development, it is crucial to continue checking in with the potential market to test theories, usability, functionality, and if the project is even still applicable or necessary. Communication with the end user will largely mitigate issues in addressing the full problem appropriately. 
+
+Estimation for this project will require frequent updates after communication with the potential market to update or push back deadlines as necessary. The overhead from clear communication is a necessary cost to ensure the market is appropriately taken care of.
