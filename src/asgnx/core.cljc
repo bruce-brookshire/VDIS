@@ -251,10 +251,10 @@
          (experts-question-msg experts rest-args)]))))
 
 ;asks for the menu at a location
-(defn ask-menu [location {:keys [args user-id]}]
-  (if (empty? location)
+(defn ask-menu [menu {:keys [args user-id]}]
+  (if (empty? menu)
     [[] "That location does not have a menu."]
-    [[] (str "Menu: " location)]))
+    [[] (str "Menu at " (first args) ": " menu)]))
 
 ;sets the menu for a location
 (defn set-menu [location {:keys [args user-id]}]
@@ -262,10 +262,10 @@
     (str "You have registered a menu for the location: " (first args) ".")])
 
 ;asks for the hours at a location
-(defn ask-hrs [location {:keys [args user-id]}]
-  (if (empty? location)
+(defn ask-hrs [hours {:keys [args user-id]}]
+  (if (empty? hours)
     [[] "That location does not have any hours."]
-    [[] (str "Hours: " location)]))
+    [[] (str "Hours at " (first args) ": " hours)]))
 
 ;sets the hours for a location
 (defn set-hrs [location {:keys [args user-id]}]
@@ -292,15 +292,26 @@
     [[] (apply f args)]))
 
 
-; routes for commands
-(def routes {"default"  (stateless (fn [& args] "Unknown command."))
+; routes for commands. works for both lower and uppercased first letter. rest must be lower.
+(def routes {;Lowercase
+             "default"  (stateless (fn [& args] "Unknown command."))
+             "helpme"     (stateless (fn [& args] "Welcome to the Vanderbilt Dining Information Service (VDIS)!\nVDIS helps get you information about the dining halls around Vanderbilt.\n\nCommands:\nline <location>\nmenu <location>\nhours <location>\n\nIf you are an employee, contact admin for more commands."))
              "expert"   add-line-expert
              "line"     ask-line-length
              "answer"   answer-question
              "menu"     ask-menu
              "set-menu" set-menu
              "hours"    ask-hrs
-             "set-hours" set-hrs})
+             "set-hours" set-hrs
+             ;Caps
+             "Helpme"     (stateless (fn [& args] "Welcome to the Vanderbilt Dining Information Service (VDIS)!\nVDIS helps get you information about the dining halls around Vanderbilt.\n\nCommands:\nline <location>\nmenu <location>\nhours <location>\n\nIf you are an employee, contact admin for more commands."))
+             "Expert"   add-line-expert
+             "Line"     ask-line-length
+             "Answer"   answer-question
+             "Menu"     ask-menu
+             "Set-menu" set-menu
+             "Hours"    ask-hrs
+             "Set-hours" set-hrs})
 
 ;gets the expert on a topic
 (defn experts-on-topic-query [state-mgr pmsg]
@@ -323,15 +334,23 @@
     (get! state-mgr [:hours location])))
 
 
-;query mappings for different commands
+;query mappings for different commands. works for both lower and uppercased first letter. rest must be lower.
 (def queries
-  {"expert" experts-on-topic-query
+  {"expert" experts-on-topic-query ;Lowercase
    "line"   experts-on-topic-query
    "answer" conversations-for-user-query
    "menu"   menu-for-location-query
    "set-menu" menu-for-location-query
    "hours"  hours-for-location-query
-   "set-hours" hours-for-location-query})
+   "set-hours" hours-for-location-query
+   "Expert" experts-on-topic-query ;Caps
+   "Line"   experts-on-topic-query
+   "Answer" conversations-for-user-query
+   "Menu"   menu-for-location-query
+   "Set-menu" menu-for-location-query
+   "Hours"  hours-for-location-query
+   "Set-hours" hours-for-location-query})
+
 
 
 
