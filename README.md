@@ -51,25 +51,25 @@ Sometimes yes, but interviewees tended to stick to what their habits + schedules
 
 
 # Requirements
-   
+
 When writing an application for an end user, it is critically important to ensure that you have the correct perspective of the problem to solve. Maintaining a humble and utility focused perspective during R&D helps foster a wholistic perspective of a product as a solution.
 
 In order to best serve Vanderbilt's population with this texting service, Vanderbilt Dining Info Service (VDIS) must be able to consistently deliver accurate information regarding the dining environment at a location. This includes being able to retrieve information about what is being served and how long the lines are at any location on campus. Thus, the list below is a summary of the cornerstone requirements for the project.
 
 * Admin users can update a menu for a location
-* General users can query for a location's menu by using a format like `<location> menu`
-* General users can query for a location's hours by using a format like `<location> hours`
-* General users can query for a location's wait time by using a format like `<location> wait time`
+* General users can query for a location's menu by using a format like `menu <location>`
+* General users can query for a location's hours by using a format like `hours <location>`
+* General users can query for a location's wait time by using a format like `wait-time <location> `
 * Unavailable information can be forwarded to an admin to be answered.
 
-   
+
 # Development Approach
-   
+
 The most crucial part of a project is identifying and addressing the need for a product and defining the scope of the project to produce a helpful product. Having identified several user stories and interviewed multiple individuals who validate a potential need for this application, the next steps are setting out the structure necessary to actually create this application.
 
 In order to correctly build out this application, it is imperative to identify the necessary functional systems. These systems include identifying and interacting with users (treating admin and general users appropriately according to their roles), storing information about a location for a certain applicable time period, and allowing conditional forwarding of questions to be answered if there are no answers previously available about a location.
 
-Now that these systems have been appropriately identified, the details about the application must be roughly discussed to ensure general cohesiveness. 
+Now that these systems have been appropriately identified, the details about the application must be roughly discussed to ensure general cohesiveness.
 The structure of a user must include:
 * Permissions level
 * Unique identifier by phone number
@@ -79,6 +79,6 @@ It could also be useful to store a users past interactions with the service to p
 
 While this is a user facing application, the systems must be built from inward (internal api and state tracking) to out (user interactive texting services). This helps identify the necessary core functionality that the interface must accommodate.
 
-During development, it is crucial to continue checking in with the potential market to test theories, usability, functionality, and if the project is even still applicable or necessary. Communication with the end user will largely mitigate issues in addressing the full problem appropriately. 
+During development, it is crucial to continue checking in with the potential market to test theories, usability, functionality, and if the project is even still applicable or necessary. Communication with the end user will largely mitigate issues in addressing the full problem appropriately.
 
 Estimation for this project will require frequent updates after communication with the potential market to update or push back deadlines as necessary. The overhead from clear communication is a necessary cost to ensure the market is appropriately taken care of.
