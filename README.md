@@ -48,19 +48,19 @@ Sometimes yes, but interviewees tended to stick to what their habits + schedules
 
 
 
-
-
 # Requirements
 
 When writing an application for an end user, it is critically important to ensure that you have the correct perspective of the problem to solve. Maintaining a humble and utility focused perspective during R&D helps foster a wholistic perspective of a product as a solution.
 
 In order to best serve Vanderbilt's population with this texting service, Vanderbilt Dining Info Service (VDIS) must be able to consistently deliver accurate information regarding the dining environment at a location. This includes being able to retrieve information about what is being served and how long the lines are at any location on campus. Thus, the list below is a summary of the cornerstone requirements for the project.
 
-* Admin users can update a menu for a location
-* General users can query for a location's menu by using a format like `menu <location>`
-* General users can query for a location's hours by using a format like `hours <location>`
-* General users can query for a location's wait time by using a format like `wait-time <location> `
-* Unavailable information can be forwarded to an admin to be answered.
+* Admin users can update a menu for a location by using the format `set-menu <location>`
+* General users can query for a location's menu by using the format `menu <location>`
+* Admin users can update the hours for a location by using the format `set-hours <location>`
+* General users can query for a location's hours by using the format `hours <location>`
+* General users can query for a location's wait time by using the format `line <location>`
+* Admin users can respond with the line length with `answer <line length>`
+* Admin users can register with `experts <location>`
 
 
 # Development Approach

@@ -192,21 +192,17 @@
   (map #(action-send-msg % msg) people))
 
 
-;; Asgn 2.
-;;
-;; @Todo: Create a function called action-insert that takes
+;; Create a function called action-insert that takes
 ;; a list of keys in a `ks` parameter, a value to bind to that
 ;; key path to in a `v` parameter, and returns a map with
 ;; the key :ks bound to the `ks` parameter value and the key :v
 ;; vound to the `v` parameter value.)
 ;; The map should also have the key :action bound to the value
 ;; :assoc-in.
-;;
 (defn action-insert [ks v] {:action :assoc-in :ks ks :v v})
 
-;; Asgn 2.
-;;
-;; @Todo: Create a function called action-inserts that takes:
+
+;; Create a function called action-inserts that takes:
 ;; 1. a key prefix (e.g., [:a :b])
 ;; 2. a list of suffixes for the key (e.g., [:c :d])
 ;; 3. a value to bind
@@ -214,17 +210,6 @@
 ;; and calls (action-insert combined-key value) for each possible
 ;; combined-key that can be produced by appending one of the suffixes
 ;; to the prefix.
-;;
-;; In other words, this invocation:
-;;
-;; (action-inserts [:foo :bar] [:a :b :c] 32)
-;;
-;; would be equivalent to this:
-;;
-;; [(action-insert [:foo :bar :a] 32)
-;;  (action-insert [:foo :bar :b] 32)
-;;  (action-insert [:foo :bar :c] 32)]
-;;
 (defn action-inserts [prefix ks v]
   (map #(action-insert % v) (map #(conj prefix %) ks)))
 
@@ -254,7 +239,7 @@
 
 ;asks for the length of a line at a location
 (defn ask-line-length [experts {:keys [args user-id]}]
-  (if (empty? (rest args))
+  (if (empty? args)
     [[]
      "You must ask for a location."]
     (if (empty? experts)
@@ -278,8 +263,19 @@
 (defn set-menu [location {:keys [args user-id]}]
   (conj
    [(action-insert [:menu (first args)] (string/join " " (rest args)))]
-   (str "you have registered a menu for the location: " (first args) ".")))
+   (str "You have registered a menu for the location: " (first args) ".")))
 
+;asks for the hours at a location
+(defn ask-hrs [location {:keys [args user-id]}]
+  (if (empty? location)
+    [[] "That location does not have any hours."]
+    [[] (str "Hours: " location)]))
+
+;sets the hours for a location
+(defn set-hrs [location {:keys [args user-id]}]
+  (conj
+   [(action-insert [:hours (first args)] (string/join " " (rest args)))]
+   (str "You have registered hours for the location: " (first args) ".")))
 
 ;answers the line length question asked of from a line length expert
 (defn answer-question [conversation {:keys [args]}]
@@ -311,7 +307,9 @@
              "line"     ask-line-length
              "answer"   answer-question
              "menu"     ask-menu
-             "set"      set-menu})
+             "set-menu" set-menu
+             "hours"    ask-hours
+             "set-hours" set-hours})
 
 ;gets the expert on a topic
 (defn experts-on-topic-query [state-mgr pmsg]
@@ -328,10 +326,10 @@
   (let [[location]  (:args pmsg)]
     (get! state-mgr [:menu location])))
 
-;gets the menu for a location
-(defn set-menu-query [state-mgr pmsg]
+;gets the hours for a location
+(defn hours-for-location-query [state-mgr pmsg]
   (let [[location]  (:args pmsg)]
-    (get! state-mgr [:menu location])))
+    (get! state-mgr [:hours location])))
 
 
 ;query mappings for different commands
@@ -340,7 +338,9 @@
    "line"   experts-on-topic-query
    "answer" conversations-for-user-query
    "menu"   menu-for-location-query
-   "set"    set-menu-query})
+   "set-menu" menu-for-location-query
+   "hours"  hours-for-location-query
+   "set-hours" hours-for-location-query})
 
 
 
@@ -352,26 +352,7 @@
       {})))
 
 
-;; Asgn 1.
-;;
-;; @Todo: This function should return a function (<== pay attention to the
-;; return type) that takes a parsed message as input and returns the
-;; function in the `routes` map that is associated with a key matching
-;; the `:cmd` in the parsed message. The returned function would return
-;; `welcome` if invoked with `{:cmd "welcome"}`.
-;;
-;; Example:
-;;
-;; (let [msg {:cmd "welcome" :args ["bob"]}]
-;;   (((create-router {"welcome" welcome}) msg) msg) => "Welcome bob"
-;;
-;; If there isn't a function in the routes map that is mapped to a
-;; corresponding key for the command, you should return the function
-;; mapped to the key "default".
-;;
-;; See the create-router-test in test/asgnx/core_test.clj for the
-;; complete specification.
-;;
+;Creates a router
 (defn create-router [routes] (fn [pmsg] (let [routeCmd (get routes (get pmsg :cmd))]
                                           (if (nil? routeCmd) (get routes "default") routeCmd))))
 

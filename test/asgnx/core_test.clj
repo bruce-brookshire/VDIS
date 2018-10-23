@@ -186,68 +186,63 @@
           smgr   (kvstore/create state)
           system {:state-mgr smgr
                   :effect-handlers ehdlrs}]
-      (is (= "There are no experts on that topic."
+      (is (= "That location does not have a menu."
              (<!! (handle-message
                     system
                     "test-user"
-                    "ask food best burger in nashville"))))
-      (is (= "test-user is now an expert on food."
+                    "menu rand"))))
+      (is (= "That location does not have any hours."
              (<!! (handle-message
                     system
                     "test-user"
-                    "expert food"))))
-      (is (= "Asking 1 expert(s) for an answer to: \"what burger\""
+                    "hours rand"))))
+      (is (= "test-user is now an expert on rand."
              (<!! (handle-message
                     system
                     "test-user"
-                    "ask food what burger"))))
-      (is (= "what burger"
-             (<!! (pending-send-msgs system "test-user"))))
-      (is (= "test-user2 is now an expert on food."
+                    "expert rand"))))
+      (is (= "Asking 1 employee(s) about the line length."
+             (<!! (handle-message
+                    system
+                    "test-user"
+                    "line rand"))))
+      (is (= "test-user2 is now an expert on rand."
              (<!! (handle-message
                     system
                     "test-user2"
-                    "expert food"))))
-      (is (= "Asking 2 expert(s) for an answer to: \"what burger\""
+                    "expert rand"))))
+      (is (= "Asking 2 employee(s) about the line length."
              (<!! (handle-message
                     system
                     "test-user"
-                    "ask food what burger"))))
-      (is (= "what burger"
-             (<!! (pending-send-msgs system "test-user"))))
-      (is (= "what burger"
-             (<!! (pending-send-msgs system "test-user2"))))
-      (is (= "You must ask a valid question."
+                    "line rand"))))
+      (is (= "You must ask for a location."
              (<!! (handle-message
                     system
                     "test-user"
-                    "ask food "))))
-      (is (= "test-user is now an expert on nashville."
+                    "line"))))
+      (is (= "There are no employees at that location."
              (<!! (handle-message
                     system
                     "test-user"
-                    "expert nashville"))))
-      (is (= "Asking 1 expert(s) for an answer to: \"what bus\""
+                    "line commons"))))
+      (is (= "You have registered a menu for the location: rand."
              (<!! (handle-message
                     system
                     "test-user2"
-                    "ask nashville what bus"))))
-      (is (= "what bus"
-             (<!! (pending-send-msgs system "test-user"))))
-      (is (= "Your answer was sent."
+                    "set-menu rand carrots, salad, sausage, pizza, and rand cookies"))))
+      (is (= "You have registered hours for the location: rand."
              (<!! (handle-message
-                   system
-                   "test-user"
-                   "answer the blue bus"))))
-      (is (= "the blue bus"
-             (<!! (pending-send-msgs system "test-user2"))))
-      (is (= "You did not provide an answer."
+                    system
+                    "test-user2"
+                    "set-hours rand 9am-12pm MTWRF"))))
+      (is (= "Menu: carrots, salad, sausage, pizza, and rand cookies"
              (<!! (handle-message
-                   system
-                   "test-user"
-                   "answer"))))
-      (is (= "You haven't been asked a question."
+                    system
+                    "test-user2"
+                    "menu rand"))))
+      (is (= "Hours: 9am-12pm MTWRF"
              (<!! (handle-message
-                   system
-                   "test-user3"
-                   "answer the blue bus")))))))
+                    system
+                    "test-user2"
+                    "hours rand")))))))
