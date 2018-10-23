@@ -21,7 +21,7 @@
             :npm {:dependencies [[serverless-cljs-plugin "0.1.2"]
                                  [ws "6.0.0"]
                                  [twilio "3.19.1"]
-                                 [serverless-secrets "3.0.0"]
+                                 [serverless-secrets "3.0.0-beta.12"]
                                  [source-map-support "0.5.7"]
                                  [aws-sdk "2.289.0"]
                                  [bignumber.js "7.2.1"]]}
@@ -61,7 +61,7 @@
 
                              :env {:dev true}}}
 
-            :main asgnx.cli 
+            :main asgnx.cli
 
             :cljsbuild
             {:builds {:lambda

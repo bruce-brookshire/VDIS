@@ -240,60 +240,61 @@
 ;asks for the length of a line at a location
 (defn ask-line-length [experts {:keys [args user-id]}]
   (if (empty? args)
-    [[]
+    [[(action-send-msg user-id "You must ask for a location.")]
      "You must ask for a location."]
     (if (empty? experts)
-      [[]
+      [[(action-send-msg user-id "There are no employees at that location.")]
        "There are no employees at that location."]
       (let [rest-args (rest args)
             msg (string/join " " rest-args)]
 
-        [(into
-          (action-inserts [:conversations] experts {:last-question msg :asker user-id})
-          (action-send-msgs experts msg))
+        [(conj (concat (action-inserts [:conversations] experts {:last-question msg :asker user-id})
+                      (action-send-msgs experts msg))
+              (action-send-msg user-id (experts-question-msg experts rest-args)))
          (experts-question-msg experts rest-args)]))))
 
 ;asks for the menu at a location
 (defn ask-menu [location {:keys [args user-id]}]
   (if (empty? location)
-    [[] "That location does not have a menu."]
-    [[] (str "Menu: " location)]))
+    [[(action-send-msg user-id "That location does not have a menu.")] "That location does not have a menu."]
+    [[(action-send-msg user-id (str "Menu: " location))] (str "Menu: " location)]))
 
 ;sets the menu for a location
 (defn set-menu [location {:keys [args user-id]}]
-  (conj
-   [(action-insert [:menu (first args)] (string/join " " (rest args)))]
-   (str "You have registered a menu for the location: " (first args) ".")))
+   [[(action-send-msg user-id (str "You have registered a menu for the location: " (first args) "."))
+     (action-insert [:menu (first args)] (string/join " " (rest args)))]
+    (str "You have registered a menu for the location: " (first args) ".")])
 
 ;asks for the hours at a location
 (defn ask-hrs [location {:keys [args user-id]}]
   (if (empty? location)
-    [[] "That location does not have any hours."]
-    [[] (str "Hours: " location)]))
+    [[(action-send-msg user-id "That location does not have any hours.")] "That location does not have any hours."]
+    [[(action-send-msg user-id  (str "Hours: " location))] (str "Hours: " location)]))
 
 ;sets the hours for a location
 (defn set-hrs [location {:keys [args user-id]}]
-  (conj
-   [(action-insert [:hours (first args)] (string/join " " (rest args)))]
-   (str "You have registered hours for the location: " (first args) ".")))
+   [[(action-insert [:hours (first args)] (string/join " " (rest args)))
+     (action-send-msg user-id (str "You have registered hours for the location: " (first args) "."))]
+    (str "You have registered hours for the location: " (first args) ".")])
 
 ;answers the line length question asked of from a line length expert
-(defn answer-question [conversation {:keys [args]}]
+(defn answer-question [conversation {:keys [args user-id]}]
   (if (empty? (rest args))
-    [[]
+    [[(action-send-msg user-id "You did not provide an answer.")]
      "You did not provide an answer."]
     (if (nil? conversation)
-      [[]
+      [[(action-send-msg user-id "You haven't been asked a question.")]
        "You haven't been asked a question."]
-      [[(action-send-msg (:asker conversation) (string/join " " args))]
+      [[(action-send-msg (:asker conversation) (string/join " " args))
+        (action-send-msg user-id "Your answer was sent.")]
        "Your answer was sent."])))
 
 
 ;adds a line length expert for a location
 (defn add-line-expert [experts {:keys [args user-id]}]
-  (conj
-   [(experts-register experts (first args) user-id (rest args))]
-   (str user-id " is now an expert on " (first args) ".")))
+  [(conj (experts-register experts (first args) user-id (rest args))
+         (action-send-msg user-id (str user-id " is now an expert on " (first args) ".")))
+   (str user-id " is now an expert on " (first args) ".")])
 
 ;; Don't edit!
 (defn stateless [f]
@@ -308,8 +309,8 @@
              "answer"   answer-question
              "menu"     ask-menu
              "set-menu" set-menu
-             "hours"    ask-hours
-             "set-hours" set-hours})
+             "hours"    ask-hrs
+             "set-hours" set-hrs})
 
 ;gets the expert on a topic
 (defn experts-on-topic-query [state-mgr pmsg]
