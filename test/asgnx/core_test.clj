@@ -236,12 +236,12 @@
                     system
                     "test-user2"
                     "set-hours rand 9am-12pm MTWRF"))))
-      (is (= "Menu: carrots, salad, sausage, pizza, and rand cookies"
+      (is (= "Menu at rand: carrots, salad, sausage, pizza, and rand cookies"
              (<!! (handle-message
                     system
                     "test-user2"
                     "menu rand"))))
-      (is (= "Hours: 9am-12pm MTWRF"
+      (is (= "Hours at rand: 9am-12pm MTWRF"
              (<!! (handle-message
                     system
                     "test-user2"
